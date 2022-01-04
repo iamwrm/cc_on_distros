@@ -32,4 +32,7 @@ jobs:
           lscpu
           free -h
           ip a
+          ls
+          pwd
           bash download_and_build.sh
+          ls
