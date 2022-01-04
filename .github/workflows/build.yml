@@ -47,6 +47,7 @@ jobs:
       
       - name: Configure and build
         run: |
+          gcc_version=${{ env.GCC_VERSION }}
           cd gcc-${gcc_version}
           ./contrib/download_prerequisites
           cd ..
