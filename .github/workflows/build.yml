@@ -28,8 +28,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Show basic system info
         run: |
           uname -a
           lscpu
@@ -37,10 +36,17 @@ jobs:
           ip a
           ls
           pwd
-          bash download_and_build.sh
+
+      # Runs a set of commands using the runners shell
+      - name: Download and decompress gcc source file
+        run: |
           gcc_version=${{ env.GCC_VERSION }}
           wget -q https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.gz > /dev/null
           tar xvf gcc-${gcc_version}.tar.gz > /dev/null
+          ls
+      
+      - name: Configure and build
+        run: |
           cd gcc-${gcc_version}
           ./contrib/download_prerequisites
           cd ..
@@ -49,10 +55,10 @@ jobs:
           $PWD/../gcc-${gcc_version}/configure --prefix=$HOME/toolchains --enable-languages=c,c++ --disable-multilib
           make -j$(nproc)
           make install
-          ls
+
       - uses: actions/upload-artifact@v2
         with:
-          name: my-artifact
-          path: gcc-${{ env.GCC_VERSION }}-build
+          name: gcc-build-artifact
+          path: gcc-${{ env.GCC_VERSION }}
 
 
