@@ -13,6 +13,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  GCC_VERSION: "11.2.0"
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -35,4 +38,21 @@ jobs:
           ls
           pwd
           bash download_and_build.sh
+          gcc_version=${{ env.GCC_VERSION }}
+          wget -q https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.gz > /dev/null
+          tar xvf gcc-${gcc_version}.tar.gz > /dev/null
+          cd gcc-${gcc_version}
+          ./contrib/download_prerequisites
+          cd ..
+          mkdir gcc-${gcc_version}-build
+          cd gcc-${gcc_version}-build
+          $PWD/../gcc-${gcc_version}/configure --prefix=$HOME/toolchains --enable-languages=c,c++ --disable-multilib
+          make -j$(nproc)
+          make install
           ls
+      - uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: gcc-${{ env.GCC_VERSION }}-build
+
+
