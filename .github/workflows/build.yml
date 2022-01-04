@@ -33,6 +33,7 @@ jobs:
           uname -a
           lscpu
           free -h
+          df -h
           ip a
           ls
           pwd
