@@ -46,7 +46,7 @@ jobs:
           tar xvf gcc-${gcc_version}.tar.gz > /dev/null
           ls
       
-      - name: Configure and build
+      - name: Configure
         run: |
           gcc_version=${{ env.GCC_VERSION }}
           cd gcc-${gcc_version}
@@ -55,12 +55,29 @@ jobs:
           mkdir gcc-${gcc_version}-build
           cd gcc-${gcc_version}-build
           $PWD/../gcc-${gcc_version}/configure --prefix=$HOME/toolchains --enable-languages=c,c++ --disable-multilib
+
+      - name: Build
+        run: |
+          gcc_version=${{ env.GCC_VERSION }}
+          cd gcc-${gcc_version}-build
           make -j$(nproc)
           make install
+      
+      - name: Inspect size
+        run: |
+          pwd
+          ls
+          df -h -d2 ${PWD}
+          
 
       - uses: actions/upload-artifact@v2
         with:
           name: gcc-build-artifact
           path: gcc-${{ env.GCC_VERSION }}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: toolchain-artifact
+          path: $HOME/toolchains
 
 
