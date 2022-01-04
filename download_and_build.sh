@@ -3,7 +3,7 @@
 
 gcc_version=11.2.0
 
-wget https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.gz
+wget https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.gz > /dev/null
 tar xvf gcc-${gcc_version}.tar.gz > /dev/null
 
 cd gcc-${gcc_version}
