@@ -67,8 +67,8 @@ jobs:
         run: |
           pwd
           ls
-          df -h -d2 ${PWD}
-          
+          du -h -d2 ${PWD}
+          df -h
 
       - uses: actions/upload-artifact@v2
         with:
