@@ -33,38 +33,21 @@ jobs:
         run: |
           docker run -v ${PWD}:/workspace -w=/workspace centos:7 bash script_in_docker.sh
       
-      # - name: Configure
-      #   run: |
-      #     gcc_version=${{ env.GCC_VERSION }}
-      #     cd gcc-${gcc_version}
-      #     ./contrib/download_prerequisites
-      #     cd ..
-      #     mkdir gcc-${gcc_version}-build
-      #     cd gcc-${gcc_version}-build
-      #     $PWD/../gcc-${gcc_version}/configure --prefix=$HOME/toolchains --enable-languages=c,c++ --disable-multilib
+      - name: Inspect size
+        run: |
+          pwd
+          ls
+          du -h -d2 ${PWD}
+          df -h
 
-      # - name: Build
-      #   run: |
-      #     gcc_version=${{ env.GCC_VERSION }}
-      #     cd gcc-${gcc_version}-build
-      #     make -j$(nproc)
-      #     make install
-      
-      # - name: Inspect size
-      #   run: |
-      #     pwd
-      #     ls
-      #     du -h -d2 ${PWD}
-      #     df -h
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gcc-build-artifact
+          path: gcc-${{ env.GCC_VERSION }}
 
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: gcc-build-artifact
-      #     path: gcc-${{ env.GCC_VERSION }}
-
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: toolchain-artifact
-      #     path: toolchains
+      - uses: actions/upload-artifact@v2
+        with:
+          name: toolchain-artifact
+          path: toolchains
 
 

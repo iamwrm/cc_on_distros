@@ -14,4 +14,10 @@ cd ${gcc_dir}
 cd ..
 mkdir ${gcc_dir}-build
 cd ${gcc_dir}-build
-$PWD/../${gcc_dir}/configure --prefix=$HOME/toolchains --enable-languages=c,c++ --disable-multilib
+$PWD/../${gcc_dir}/configure --prefix=${PWD}/toolchains --enable-languages=c,c++ --disable-multilib
+
+
+cd gcc-*-build
+make -j$(nproc)
+make install
+
