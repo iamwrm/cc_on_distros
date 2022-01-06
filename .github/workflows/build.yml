@@ -2,12 +2,14 @@ name: CI
 
 on: push
 
-env:
-  GCC_VERSION: "11.2.0"
-
 jobs:
   build:
     runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        gcc_version: ["11.2.0", "9.4.0", "8.5.0", "10.3.0"]
 
     steps:
       - uses: actions/checkout@v2
@@ -24,7 +26,7 @@ jobs:
 
       - name: Download gcc source
         run: |
-          bash ci/download_gcc.sh ${{ env.GCC_VERSION }}
+          bash ci/download_gcc.sh ${{ matrix.gcc_version }}
 
       - name: Docker build
         run: |
@@ -44,5 +46,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: gcc-build-artifact
-          path: gcc-${{ env.GCC_VERSION }}
+          path: gcc-${{ matrix.gcc_version }}
 
