@@ -13,7 +13,7 @@ echo ${gcc_dir}
 GCC_SRC_DIR=${WORK_DIR}/${gcc_dir}
 GCC_BUILD_DIR=${WORK_DIR}/${gcc_dir}-build
 
-bash prepare_centos_build_system.sh
+yum group install -y "Development Tools"
 
 cd ${GCC_SRC_DIR}
 ./contrib/download_prerequisites

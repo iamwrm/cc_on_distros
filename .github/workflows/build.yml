@@ -1,4 +1,3 @@
-
 name: CI
 
 on: push
@@ -23,31 +22,27 @@ jobs:
           ls
           pwd
 
-      - name: Download and decompress gcc source file
+      - name: Download gcc source
         run: |
-          gcc_version=${{ env.GCC_VERSION }}
-          wget -q https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.gz > /dev/null
-          tar xvf gcc-${gcc_version}.tar.gz > /dev/null
-          ls
+          bash ci/download_gcc.sh ${{ env.GCC_VERSION }}
+
       - name: Docker build
         run: |
-          docker run -v ${PWD}:/workspace -w=/workspace centos:7 bash script_in_docker.sh
+          bash ci/run_docker_oneline.sh
       
       - name: Inspect size
         run: |
           pwd
           ls
-          du -h -d2 ${PWD}
-          df -h
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: gcc-build-artifact
-          path: gcc-${{ env.GCC_VERSION }}
+          du -h -d1 ${PWD}
 
       - uses: actions/upload-artifact@v2
         with:
           name: toolchain-artifact
           path: toolchains
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gcc-build-artifact
+          path: gcc-${{ env.GCC_VERSION }}
 
