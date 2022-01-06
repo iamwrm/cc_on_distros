@@ -7,6 +7,8 @@ gcc_dir=${gcc_tar::-7}
 echo ${gcc_dir}
 ls
 
+bash prepare_centos_build_system.sh
+
 cd ${gcc_dir}
 ./contrib/download_prerequisites
 cd ..
