@@ -1,23 +1,29 @@
 ls
 pwd
 uname -a
+
+WORK_DIR=${PWD}
+INSTALL_PREFIX=${WORK_DIR}/toolchains
+
 gcc_tar=$(ls gcc*tar.gz)
-echo ${gcc_tar}
 gcc_dir=${gcc_tar::-7}
+echo ${gcc_tar}
 echo ${gcc_dir}
-ls
+
+GCC_SRC_DIR=${WORK_DIR}/${gcc_dir}
+GCC_BUILD_DIR=${WORK_DIR}/${gcc_dir}-build
 
 bash prepare_centos_build_system.sh
 
-cd ${gcc_dir}
+cd ${GCC_SRC_DIR}
 ./contrib/download_prerequisites
-cd ..
-mkdir ${gcc_dir}-build
-cd ${gcc_dir}-build
-$PWD/../${gcc_dir}/configure --prefix=${PWD}/toolchains --enable-languages=c,c++ --disable-multilib
 
+mkdir -p ${GCC_BUILD_DIR}
+mkdir -p ${INSTALL_PREFIX}
 
-cd gcc-*-build
+cd ${GCC_BUILD_DIR}
+${GCC_SRC_DIR}/configure --prefix=${INSTALL_PREFIX} --enable-languages=c,c++ --disable-multilib
+
 make -j$(nproc)
 make install
 
