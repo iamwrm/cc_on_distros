@@ -78,6 +78,6 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: toolchain-artifact
-          path: $HOME/toolchains
+          path: toolchains
 
 
