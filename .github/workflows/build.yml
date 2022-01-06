@@ -27,6 +27,7 @@ jobs:
       - name: Download gcc source
         run: |
           bash ci/download_gcc.sh ${{ matrix.gcc_version }}
+          ls -l
 
       - name: Docker build
         run: |
