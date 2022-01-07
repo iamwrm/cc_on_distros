@@ -38,14 +38,20 @@ jobs:
           pwd
           ls
           du -h -d1 ${PWD}
+          tar -czvf toolchains.tar.gz toolchains
 
       - uses: actions/upload-artifact@v2
         with:
-          name: toolchain-artifact
+          name: gcc-${{ matrix.gcc_version }}-toolchains-artifact
           path: toolchains
 
       - uses: actions/upload-artifact@v2
         with:
-          name: gcc-build-artifact
+          name: gcc-${{ matrix.gcc_version }}-toolchains-artifact-tar
+          path: toolchains.tar.gz
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gcc-${{ matrix.gcc_version }}-build-artifact
           path: gcc-${{ matrix.gcc_version }}
 
