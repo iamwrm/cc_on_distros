@@ -78,3 +78,5 @@ jobs:
           docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls -la
           docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} pwd
           docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls /root
+          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} cat /root/toolchains/gcc_version
+          
