@@ -38,27 +38,25 @@ jobs:
 
       - name: Docker build
         run: |
-          # bash ci/run_docker_oneline.sh
-          mkdir toolchains
-          echo gcc-${{ matrix.gcc_version }} > toolchains/gcc_version
+          bash ci/run_docker_oneline.sh
       
-      # - name: Inspect size
-      #   run: |
-      #     pwd
-      #     ls
-      #     du -h -d1 ${PWD}
-      #     tar -czvf toolchains.tar.gz toolchains
-      #     tar -czvf gcc-${{ matrix.gcc_version }}-build.tar.gz gcc-${{ matrix.gcc_version }}-build
+      - name: Inspect size
+        run: |
+          pwd
+          ls
+          du -h -d1 ${PWD}
+          tar -czvf toolchains.tar.gz toolchains
+          tar -czvf gcc-${{ matrix.gcc_version }}-build.tar.gz gcc-${{ matrix.gcc_version }}-build
 
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: gcc-${{ matrix.gcc_version }}-toolchains
-      #     path: toolchains.tar.gz
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gcc-${{ matrix.gcc_version }}-toolchains
+          path: toolchains.tar.gz
 
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: gcc-${{ matrix.gcc_version }}-build
-      #     path: gcc-${{ matrix.gcc_version }}-build.tar.gz
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gcc-${{ matrix.gcc_version }}-build
+          path: gcc-${{ matrix.gcc_version }}-build.tar.gz
 
       - name: Login docker 
         run: |
@@ -74,9 +72,6 @@ jobs:
 
       - name: Test docker image
         run: |
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls -la
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} pwd
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls /root
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} cat /root/toolchains/gcc_version
+          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} toolchains/bin/gcc --version
+          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} /root/toolchains/bin/gcc --version
           
