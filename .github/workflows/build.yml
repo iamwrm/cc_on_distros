@@ -72,6 +72,10 @@ jobs:
 
       - name: Test docker image
         run: |
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} toolchains/bin/gcc --version
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} /root/toolchains/bin/gcc --version
+          ## toolchain/bin/gcc has issue, try ls and try abs path
+          ## 
+          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} pwd
+          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls
+          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} /root/toolchain/bin/gcc --version
+
           
