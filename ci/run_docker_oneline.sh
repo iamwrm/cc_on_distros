@@ -1,0 +1,1 @@
+docker run -v ${PWD}:/workspace -w=/workspace centos:7 bash ci/script_in_docker.sh

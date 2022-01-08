@@ -1,31 +1,17 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: push
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-env:
-  GCC_VERSION: "11.2.0"
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-20.04
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      fail-fast: false
+      matrix:
+        gcc_version: ["11.2.0", "9.4.0", "8.5.0", "10.3.0"]
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: Show basic system info
@@ -38,46 +24,34 @@ jobs:
           ls
           pwd
 
-      # Runs a set of commands using the runners shell
-      - name: Download and decompress gcc source file
+      - name: Download gcc source
         run: |
-          gcc_version=${{ env.GCC_VERSION }}
-          wget -q https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.gz > /dev/null
-          tar xvf gcc-${gcc_version}.tar.gz > /dev/null
-          ls
-      
-      - name: Configure
-        run: |
-          gcc_version=${{ env.GCC_VERSION }}
-          cd gcc-${gcc_version}
-          ./contrib/download_prerequisites
-          cd ..
-          mkdir gcc-${gcc_version}-build
-          cd gcc-${gcc_version}-build
-          $PWD/../gcc-${gcc_version}/configure --prefix=$HOME/toolchains --enable-languages=c,c++ --disable-multilib
+          bash ci/download_gcc.sh ${{ matrix.gcc_version }}
+          ls -l
 
-      - name: Build
+      - name: Docker build
         run: |
-          gcc_version=${{ env.GCC_VERSION }}
-          cd gcc-${gcc_version}-build
-          make -j$(nproc)
-          make install
+          bash ci/run_docker_oneline.sh
       
       - name: Inspect size
         run: |
           pwd
           ls
-          du -h -d2 ${PWD}
-          df -h
+          du -h -d1 ${PWD}
+          tar -czvf toolchains.tar.gz toolchains
 
       - uses: actions/upload-artifact@v2
         with:
-          name: gcc-build-artifact
-          path: gcc-${{ env.GCC_VERSION }}
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: toolchain-artifact
+          name: gcc-${{ matrix.gcc_version }}-toolchains-artifact
           path: toolchains
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gcc-${{ matrix.gcc_version }}-toolchains-artifact-tar
+          path: toolchains.tar.gz
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gcc-${{ matrix.gcc_version }}-build-artifact
+          path: gcc-${{ matrix.gcc_version }}
 
