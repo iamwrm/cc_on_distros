@@ -2,6 +2,13 @@ name: CI
 
 on: push
 
+env:
+  IMAGE_REGISTRY: "ghcr.io"
+  REGISTRY_USER: "${{ github.repository_owner }}"
+  REGISTRY_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+  IMAGE_REPO: "ghcr.io/${{ github.repository_owner }}"
+  IMAGE_NAME: "centos7-gcc"
+
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -31,23 +38,36 @@ jobs:
 
       - name: Docker build
         run: |
-          bash ci/run_docker_oneline.sh
+          # bash ci/run_docker_oneline.sh
+          mkdir toolchains
+          echo gcc-${{ matrix.gcc_version }} > toolchains/gcc_version
       
-      - name: Inspect size
+      # - name: Inspect size
+      #   run: |
+      #     pwd
+      #     ls
+      #     du -h -d1 ${PWD}
+      #     tar -czvf toolchains.tar.gz toolchains
+      #     tar -czvf gcc-${{ matrix.gcc_version }}-build.tar.gz gcc-${{ matrix.gcc_version }}-build
+
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: gcc-${{ matrix.gcc_version }}-toolchains
+      #     path: toolchains.tar.gz
+
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: gcc-${{ matrix.gcc_version }}-build
+      #     path: gcc-${{ matrix.gcc_version }}-build.tar.gz
+
+      - name: Login docker 
         run: |
-          pwd
-          ls
-          du -h -d1 ${PWD}
-          tar -czvf toolchains.tar.gz toolchains
-          tar -czvf gcc-${{ matrix.gcc_version }}-build.tar.gz gcc-${{ matrix.gcc_version }}-build
+          echo ${{ env.REGISTRY_TOKEN }} | docker login ${{ env.IMAGE_REGISTRY }} -u ${{ env.REGISTRY_USER }} --password-stdin
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: gcc-${{ matrix.gcc_version }}-toolchains
-          path: toolchains.tar.gz
+      - name: Docker build
+        run: |
+          docker build -t ${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} .
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: gcc-${{ matrix.gcc_version }}-build
-          path: gcc-${{ matrix.gcc_version }}-build.tar.gz
-
+      - name: Push docker image
+        run: |
+          docker push ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }}
