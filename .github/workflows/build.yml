@@ -75,7 +75,7 @@ jobs:
           ## toolchain/bin/gcc has issue, try ls and try abs path
           ## 
           docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} pwd
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} /root/toolchain/bin/gcc --version
+          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls /root
+          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} /root/toolchains/bin/gcc --version
 
           
