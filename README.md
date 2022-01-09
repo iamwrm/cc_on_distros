@@ -10,5 +10,12 @@ Check if artifact uploads work as expected
 Check glibc version: centos can run
 Use docker to compile
 
+TODO:
+
+- Add ubuntu:20.04
+- Add clang,dpc++
+- build the images at the same time
+- rename the repo to cc_on_distro
+
 
 
