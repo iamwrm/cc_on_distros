@@ -36,20 +36,10 @@ jobs:
 
       - name: Docker build
         run: |
-          docker run -v ${PWD}:/workspace -w=/workspace ${{ matrix.os }} bash ci/${{ matrix.cc_name }}/entry.sh
-
-      # - name: Inspect size
-      #   run: |
-      #     pwd
-      #     ls
-      #     du -h -d1 ${PWD}
-      #     tar -czvf toolchains.tar.gz toolchains
-      #     tar -czvf gcc-${{ matrix.gcc_version }}-build.tar.gz gcc-${{ matrix.gcc_version }}-build
-
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: gcc-${{ matrix.gcc_version }}-toolchains
-      #     path: toolchains.tar.gz
+          WORKDIR=${PWD}
+          cd ci/distros/${{ matrix.os }}
+          cp ${WORKDIR}/ci/${{ matrix.cc_name }}/*.sh .
+          docker build -t ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.os }}_${{ matrix.cc_name }} .
 
       # - uses: actions/upload-artifact@v2
       #   with:
