@@ -1,1 +1,0 @@
-docker run --rm -it -v ${PWD}:/workspace -w=/workspace centos:7 bash 
