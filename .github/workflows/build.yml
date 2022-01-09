@@ -33,7 +33,7 @@ jobs:
 
       - name: Download dpc++ source
         run: |
-          bash ci/download_dpcxx.sh
+          bash ci/dpcpp/entry.sh
           ls -l
 
       # - name: Docker build
