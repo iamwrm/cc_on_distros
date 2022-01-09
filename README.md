@@ -25,6 +25,10 @@ Image tag: `centos7_gcc_11.2.0`, `ubuntu2004_clang_13.0.0`,`ubuntu2004_dpcxx_202
 
 The build matrix should be [distro] x [compiler] x [version]
 
+## Current status:
+Hard to dockerize build scripts. Suspend for now.
+
+
 
 ## Memo
 

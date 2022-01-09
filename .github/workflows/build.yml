@@ -38,7 +38,8 @@ jobs:
         run: |
           WORKDIR=${PWD}
           cd ci/distros/${{ matrix.os }}
-          cp ${WORKDIR}/ci/${{ matrix.cc_name }}/*.sh .
+          ls ${WORKDIR}/ci/compilers/${{ matrix.cc_name }}/*.sh .
+          cp ${WORKDIR}/ci/compilers/${{ matrix.cc_name }}/*.sh .
           docker build -t ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.os }}_${{ matrix.cc_name }} .
 
       # - uses: actions/upload-artifact@v2
