@@ -31,51 +31,51 @@ jobs:
           ls
           pwd
 
-      - name: Download gcc source
+      - name: Download dpc++ source
         run: |
-          bash ci/download_gcc.sh ${{ matrix.gcc_version }}
+          bash ci/download_dpcxx.sh
           ls -l
 
-      - name: Docker build
-        run: |
-          bash ci/run_docker_oneline.sh
+      # - name: Docker build
+      #   run: |
+      #     bash ci/run_docker_oneline.sh
       
-      - name: Inspect size
-        run: |
-          pwd
-          ls
-          du -h -d1 ${PWD}
-          tar -czvf toolchains.tar.gz toolchains
-          tar -czvf gcc-${{ matrix.gcc_version }}-build.tar.gz gcc-${{ matrix.gcc_version }}-build
+      # - name: Inspect size
+      #   run: |
+      #     pwd
+      #     ls
+      #     du -h -d1 ${PWD}
+      #     tar -czvf toolchains.tar.gz toolchains
+      #     tar -czvf gcc-${{ matrix.gcc_version }}-build.tar.gz gcc-${{ matrix.gcc_version }}-build
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: gcc-${{ matrix.gcc_version }}-toolchains
-          path: toolchains.tar.gz
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: gcc-${{ matrix.gcc_version }}-toolchains
+      #     path: toolchains.tar.gz
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: gcc-${{ matrix.gcc_version }}-build
-          path: gcc-${{ matrix.gcc_version }}-build.tar.gz
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: gcc-${{ matrix.gcc_version }}-build
+      #     path: gcc-${{ matrix.gcc_version }}-build.tar.gz
 
-      - name: Login docker 
-        run: |
-          echo ${{ env.REGISTRY_TOKEN }} | docker login ${{ env.IMAGE_REGISTRY }} -u ${{ env.REGISTRY_USER }} --password-stdin
+      # - name: Login docker 
+      #   run: |
+      #     echo ${{ env.REGISTRY_TOKEN }} | docker login ${{ env.IMAGE_REGISTRY }} -u ${{ env.REGISTRY_USER }} --password-stdin
 
-      - name: Docker build
-        run: |
-          docker build -t ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} .
+      # - name: Docker build
+      #   run: |
+      #     docker build -t ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} .
 
-      - name: Push docker image
-        run: |
-          docker push ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }}
+      # - name: Push docker image
+      #   run: |
+      #     docker push ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }}
 
-      - name: Test docker image
-        run: |
-          ## toolchain/bin/gcc has issue, try ls and try abs path
-          ## 
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} pwd
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls /root
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} /root/toolchains/bin/gcc --version
+      # - name: Test docker image
+      #   run: |
+      #     ## toolchain/bin/gcc has issue, try ls and try abs path
+      #     ## 
+      #     docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} pwd
+      #     docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls /root
+      #     docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} /root/toolchains/bin/gcc --version
 
           
