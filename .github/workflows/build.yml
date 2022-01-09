@@ -34,14 +34,9 @@ jobs:
           pwd
           ls /etc/*release
 
-      - name: Download dpc++ source
+      - name: Docker build
         run: |
-          bash ci/${{ matrix.cc_name }}/entry.sh
-          ls -l
-
-      # - name: Docker build
-      #   run: |
-      #     bash ci/run_docker_oneline.sh
+          docker run -v ${PWD}:/workspace -w=/workspace ${{ matrix.os }} bash ci/${{ matrix.cc_name }}/entry.sh
 
       # - name: Inspect size
       #   run: |

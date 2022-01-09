@@ -24,5 +24,9 @@ mkdir -p ${INSTALL_PREFIX}
 cd ${GCC_BUILD_DIR}
 ${GCC_SRC_DIR}/configure --prefix=${INSTALL_PREFIX} --enable-languages=c,c++ --disable-multilib
 
+
 make -j$(nproc)
 make install
+
+rm -rf ${GCC_BUILD_DIR}
+
