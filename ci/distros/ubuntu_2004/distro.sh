@@ -1,5 +1,5 @@
 set -xe
 
-apt-get update
-apt-get install -y build-essential
-apt-get install -y git wget curl
+apt-get update > /dev/null
+apt-get install -y build-essential > /dev/null
+apt-get install -y git wget curl > /dev/null
