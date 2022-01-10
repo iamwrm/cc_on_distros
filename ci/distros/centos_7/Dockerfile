@@ -1,6 +1,6 @@
 FROM centos:7
 
-ADD entry.sh .
+ADD entry.sh /
 
-RUN entry.sh .
+RUN /entry.sh 
 
