@@ -1,6 +1,4 @@
-set -x
-set -e
-
+set -xe
 
 LINUX_BASEKIT_URL=https://registrationcenter-download.intel.com/akdlm/irc_nas/18445/l_BaseKit_p_2022.1.1.119_offline.sh
 LINUX_HPCKIT_URL=https://registrationcenter-download.intel.com/akdlm/irc_nas/18438/l_HPCKit_p_2022.1.1.97_offline.sh

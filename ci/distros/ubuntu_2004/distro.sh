@@ -1,6 +1,5 @@
-set -x
-set -e
+set -xe
 
-apt update
-apt install -y build-essential
-apt install -y git wget curl
+apt-get update
+apt-get install -y build-essential
+apt-get install -y git wget curl

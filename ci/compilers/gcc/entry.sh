@@ -1,5 +1,4 @@
-set -x
-set -e
+set -xe
 
 
 gcc_version=11.2.0
