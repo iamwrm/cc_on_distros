@@ -16,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu_2004", "centos_7"]
-        cc_name: [gcc, dpcpp]
+        os: ["ubuntu_2004"]
+        cc_name: [gcc]
 
 
     steps:
