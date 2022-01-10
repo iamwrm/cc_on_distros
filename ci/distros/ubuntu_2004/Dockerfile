@@ -1,5 +1,5 @@
 FROM ubuntu:20.04
 
-ADD *.sh .
+ADD entry.sh .
 
 RUN entry.sh .

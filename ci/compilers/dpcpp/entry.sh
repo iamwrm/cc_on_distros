@@ -9,8 +9,53 @@ LINUX_DPCPP_COMPONENTS_WEB=intel.oneapi.lin.dpcpp-cpp-compiler
 SAMPLES_TAG=2022.1.0
 
 
-bash ci/dpcpp/install_linux.sh $LINUX_BASEKIT_URL $LINUX_DPCPP_COMPONENTS_WEB
+# ======================= install_linux.sh =======================
 
-bash ci/dpcpp/build_linux.sh dpc++ $SAMPLES_TAG
+URL=$LINUX_BASEKIT_URL
+COMPONENTS=$LINUX_DPCPP_COMPONENTS_WEB
 
+curl --output webimage.sh --url "$URL" --retry 5 --retry-delay 5
+chmod +x webimage.sh
+./webimage.sh -x -f webimage_extracted --log extract.log
+rm -rf webimage.sh
+WEBIMAGE_NAME=$(ls -1 webimage_extracted/)
+if [ -z "$COMPONENTS" ]; then
+  sudo webimage_extracted/"$WEBIMAGE_NAME"/bootstrapper -s --action install --eula=accept --log-dir=.
+  installer_exit_code=$?
+else
+  sudo webimage_extracted/"$WEBIMAGE_NAME"/bootstrapper -s --action install --components="$COMPONENTS" --eula=accept --log-dir=.
+  installer_exit_code=$?
+fi
+rm -rf webimage_extracted
+exit $installer_exit_code
 
+# ======================= build_linux.sh =======================
+
+LANGUAGE=dpc++
+SAMPLES_TAG=$SAMPLES_TAG
+
+git clone --depth 1 --branch "$SAMPLES_TAG" https://github.com/oneapi-src/oneAPI-samples.git
+
+#shellcheck disable=SC2010
+LATEST_VERSION=$(ls -1 /opt/intel/oneapi/compiler/ | grep -v latest | sort | tail -1)
+# shellcheck source=/dev/null
+source /opt/intel/oneapi/compiler/"$LATEST_VERSION"/env/vars.sh
+
+case $LANGUAGE in
+c++)
+  cd oneAPI-samples/DirectProgramming/C++/CompilerInfrastructure/Intrinsics
+  make && make run && make clean && make CC='icx -msse3' && make run
+  ;;
+fortran)
+  cd oneAPI-samples/DirectProgramming/Fortran/CombinationalLogic/openmp-primes
+  make && make run && make clean && make FC=ifx && make run
+  ;;
+dpc++)
+#shellcheck disable=SC2010
+  LATEST_VERSION=$(ls -1 /opt/intel/oneapi/tbb/ | grep -v latest | sort | tail -1)
+# shellcheck source=/dev/null
+  source /opt/intel/oneapi/tbb/"$LATEST_VERSION"/env/vars.sh
+  cd oneAPI-samples/DirectProgramming/DPC++/DenseLinearAlgebra/vector-add
+  make all && make run
+  ;;
+esac

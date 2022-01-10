@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu:20.04", "centos:7"]
+        os: ["ubuntu_2004", "centos_7"]
         cc_name: [gcc, dpcpp]
 
 
@@ -38,8 +38,7 @@ jobs:
         run: |
           WORKDIR=${PWD}
           cd ci/distros/${{ matrix.os }}
-          ls ${WORKDIR}/ci/compilers/${{ matrix.cc_name }}/*.sh .
-          cp ${WORKDIR}/ci/compilers/${{ matrix.cc_name }}/*.sh .
+          cp ${WORKDIR}/ci/${{ matrix.cc_name }}/entry.sh .
           docker build -t ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.os }}_${{ matrix.cc_name }} .
 
       # - uses: actions/upload-artifact@v2
