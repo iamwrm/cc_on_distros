@@ -2,7 +2,7 @@ set -xe
 
 
 gcc_version=11.2.0
-wget -c -q https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.gz
+wget --no-verbose https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.gz
 tar xvf gcc-${gcc_version}.tar.gz
 
 WORK_DIR=${PWD}
