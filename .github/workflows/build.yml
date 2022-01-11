@@ -34,6 +34,10 @@ jobs:
           pwd
           ls /etc/*release
 
+      - name: Login docker
+        run: |
+          echo ${{ env.REGISTRY_TOKEN }} | docker login ${{ env.IMAGE_REGISTRY }} -u ${{ env.REGISTRY_USER }} --password-stdin
+
       - name: Docker build
         run: |
           WORKDIR=${PWD}
@@ -41,22 +45,9 @@ jobs:
           cp ${WORKDIR}/ci/compilers/${{ matrix.cc_name }}/compiler.sh .
           docker build -t ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.os }}_${{ matrix.cc_name }} .
 
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: gcc-${{ matrix.gcc_version }}-build
-      #     path: gcc-${{ matrix.gcc_version }}-build.tar.gz
-
-      # - name: Login docker
-      #   run: |
-      #     echo ${{ env.REGISTRY_TOKEN }} | docker login ${{ env.IMAGE_REGISTRY }} -u ${{ env.REGISTRY_USER }} --password-stdin
-
-      # - name: Docker build
-      #   run: |
-      #     docker build -t ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} .
-
-      # - name: Push docker image
-      #   run: |
-      #     docker push ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }}
+      - name: Push docker image
+        run: |
+          docker push ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.os }}_${{ matrix.cc_name }}
 
       # - name: Test docker image
       #   run: |
