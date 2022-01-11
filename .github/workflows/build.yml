@@ -7,7 +7,7 @@ env:
   REGISTRY_USER: "${{ github.repository_owner }}"
   REGISTRY_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
   IMAGE_REPO: "ghcr.io/${{ github.repository_owner }}"
-  IMAGE_NAME: "centos7-gcc"
+  IMAGE_NAME: "cc_on_distros"
 
 jobs:
   build:
@@ -16,7 +16,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gcc_version: ["11.2.0", "9.4.0", "8.5.0", "10.3.0"]
+        os: ["ubuntu_2004","centos_7"]
+        cc_name: ["gcc","dpcpp"]
+
 
     steps:
       - uses: actions/checkout@v2
@@ -30,52 +32,27 @@ jobs:
           ip a
           ls
           pwd
+          ls /etc/*release
 
-      - name: Download gcc source
-        run: |
-          bash ci/download_gcc.sh ${{ matrix.gcc_version }}
-          ls -l
-
-      - name: Docker build
-        run: |
-          bash ci/run_docker_oneline.sh
-      
-      - name: Inspect size
-        run: |
-          pwd
-          ls
-          du -h -d1 ${PWD}
-          tar -czvf toolchains.tar.gz toolchains
-          tar -czvf gcc-${{ matrix.gcc_version }}-build.tar.gz gcc-${{ matrix.gcc_version }}-build
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: gcc-${{ matrix.gcc_version }}-toolchains
-          path: toolchains.tar.gz
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: gcc-${{ matrix.gcc_version }}-build
-          path: gcc-${{ matrix.gcc_version }}-build.tar.gz
-
-      - name: Login docker 
+      - name: Login docker
         run: |
           echo ${{ env.REGISTRY_TOKEN }} | docker login ${{ env.IMAGE_REGISTRY }} -u ${{ env.REGISTRY_USER }} --password-stdin
 
       - name: Docker build
         run: |
-          docker build -t ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} .
+          WORKDIR=${PWD}
+          cd ci/distros/${{ matrix.os }}
+          cp ${WORKDIR}/ci/compilers/${{ matrix.cc_name }}/compiler.sh .
+          docker build -t ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.os }}_${{ matrix.cc_name }} .
 
       - name: Push docker image
         run: |
-          docker push ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }}
+          docker push ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.os }}_${{ matrix.cc_name }}
 
-      - name: Test docker image
-        run: |
-          ## toolchain/bin/gcc has issue, try ls and try abs path
-          ## 
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} pwd
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls /root
-          docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} /root/toolchains/bin/gcc --version
-
-          
+      # - name: Test docker image
+      #   run: |
+      #     ## toolchain/bin/gcc has issue, try ls and try abs path
+      #     ##
+      #     docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} pwd
+      #     docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} ls /root
+      #     docker run --rm ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ matrix.gcc_version }} /root/toolchains/bin/gcc --version

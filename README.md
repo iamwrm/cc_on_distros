@@ -24,3 +24,16 @@ Image name: `cc_on_distro`
 Image tag: `centos7_gcc_11.2.0`, `ubuntu2004_clang_13.0.0`,`ubuntu2004_dpcxx_2022.1.1.119`
 
 The build matrix should be [distro] x [compiler] x [version]
+
+## Current status:
+Hard to dockerize build scripts. Suspend for now.
+
+
+
+## Memo
+
+### DPCPP
+
+https://github.com/oneapi-src/oneapi-ci
+
+
