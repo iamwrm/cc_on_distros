@@ -1,5 +1,10 @@
 set -xe
 
-apt-get update > /dev/null
-apt-get install -y build-essential > /dev/null
-apt-get install -y git wget curl > /dev/null
+export DEBIAN_FRONTEND="noninteractive"
+
+apt-get update
+apt-get install -y build-essential \
+    git \
+    wget \
+    curl \
+    cmake
