@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-20.04
 
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         os: ["ubuntu_2004","centos_7"]
-        cc_name: ["gcc11","gcc8","dpcpp"]
+        cc_name: ["gcc11","gcc8","dpcpp","clang_trunk"]
 
 
     steps:
