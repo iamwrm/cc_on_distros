@@ -7,4 +7,5 @@ apt-get install -y build-essential \
     git \
     wget \
     curl \
-    cmake
+    cmake \
+    python3 python3-pip
