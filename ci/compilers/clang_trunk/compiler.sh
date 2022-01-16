@@ -7,7 +7,6 @@ cd llvm-project
 mkdir build
 cd build
 
-cmake ../llvm -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_BUILD_TYPE=Release
+cmake ../llvm -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_BUILD_TYPE=Release -G Ninja -DLLVM_USE_LINKER=gold
 cmake --build .
-
 
