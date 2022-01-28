@@ -9,4 +9,5 @@ apt-get install -y build-essential \
     cmake \
     python3 python3-pip \
     ninja-build \
+    unzip \
     git

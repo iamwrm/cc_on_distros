@@ -2,6 +2,7 @@ set -xe
 
 yum install -y wget git curl ca-certificates \
     python3 python3-pip openssl-devel \
+    unzip \
     ninja-build
 yum groupinstall -y "Development tools"
 
