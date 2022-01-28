@@ -2,7 +2,9 @@ set -xe
 
 echo "Setup mold for faster building"
 wget -c https://nightly.link/ren15/mold_ci/workflows/build/main/mold_complie_art.zip 
-unzip mold_compile_art.zip
+pwd
+ls
+unzip ./mold_compile_art.zip
 
 chmod +x mold
 mkdir -p /usr/local/lib/mold
