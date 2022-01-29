@@ -18,8 +18,8 @@ ln -sf /usr/bin/cmake3 /usr/bin/cmake
 
 ## get gcc-10
 
-yum install centos-release-scl
-yum install devtoolset-10-gcc
+yum install -y centos-release-scl
+yum install -y devtoolset-10-gcc
 scl enable devtoolset-10 bash
 which gcc
 gcc --version
