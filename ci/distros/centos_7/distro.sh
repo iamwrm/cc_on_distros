@@ -20,6 +20,5 @@ ln -sf /usr/bin/cmake3 /usr/bin/cmake
 
 yum install -y centos-release-scl
 yum install -y devtoolset-10-gcc
-scl enable devtoolset-10 bash
-which gcc
-gcc --version
+scl enable devtoolset-10 'which gcc'
+scl enable devtoolset-10 'gcc --version'
