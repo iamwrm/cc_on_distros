@@ -22,4 +22,4 @@ yum install -y centos-release-scl
 yum install -y devtoolset-10-gcc
 scl enable devtoolset-10 'which gcc'
 scl enable devtoolset-10 'gcc --version'
-echo "\n source /opt/rh/devtoolset-10/enable \n" >> /etc/profile
+echo "source /opt/rh/devtoolset-10/enable \n" > /tmp/setup_cc.sh

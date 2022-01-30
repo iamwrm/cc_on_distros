@@ -1,5 +1,7 @@
 set -xe
 
+source /tmp/setup_cc.sh
+
 echo "Check gcc version"
 gcc --version
 which gcc
