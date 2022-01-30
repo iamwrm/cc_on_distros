@@ -9,8 +9,6 @@ which gcc
 mkdir -p /tmp/ci_build
 cd /tmp/ci_build
 
-echo "Setup mold for faster building"
-curl -fsSL https://raw.githubusercontent.com/ren15/mold_ci/HEAD/install.sh | bash
 
 echo "Cloning and building llvm"
 git clone --depth 1 https://github.com/llvm/llvm-project.git

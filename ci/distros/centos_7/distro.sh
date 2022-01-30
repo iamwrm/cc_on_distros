@@ -9,6 +9,7 @@ dnf install -y wget git curl \
     python3 python3-pip openssl-devel \
     unzip \
     cmake3 \
+    make \
     which \
     openssl-devel \
     openssl-libs \
@@ -18,13 +19,19 @@ yum groupinstall -y "Development tools"
 
 ln -sf /usr/bin/cmake3 /usr/bin/cmake
 
-## get gcc-10
-
 yum install -y centos-release-scl
 yum install -y devtoolset-10*
-scl enable devtoolset-10 'which gcc'
-scl enable devtoolset-10 'gcc --version'
-scl enable devtoolset-10 'which g++'
-scl enable devtoolset-10 'g++ --version'
+
+source /opt/rh/devtoolset-10/enable
 
 echo "source /opt/rh/devtoolset-10/enable \n" > /tmp/setup_cc.sh
+
+echo "Compiling mold"                                                                                                                       
+git clone https://github.com/rui314/mold.git
+cd mold 
+git checkout v1.0.2
+make -j$(nproc) CXX=g++
+mv mold /usr/local/bin
+mv mold-wrapper.so /usr/local/lib/mold
+
+mold --version
