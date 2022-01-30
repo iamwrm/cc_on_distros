@@ -13,4 +13,4 @@ apt-get install -y build-essential \
     unzip \
     git
 
-# touch /tmp/setup_cc.sh
+touch /tmp/setup_cc.sh
