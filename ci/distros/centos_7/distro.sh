@@ -31,7 +31,9 @@ git clone https://github.com/rui314/mold.git
 cd mold 
 git checkout v1.0.2
 make -j$(nproc) CXX=g++
+mkdir -p /usr/local/bin && mkdir -p /usr/local/lib/mold
 mv mold /usr/local/bin
 mv mold-wrapper.so /usr/local/lib/mold
+ls /usr/local/lib/mold
 
 mold --version
