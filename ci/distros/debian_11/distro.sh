@@ -11,3 +11,5 @@ apt-get install -y build-essential \
     ninja-build \
     unzip \
     git
+
+touch /tmp/setup_cc.sh
