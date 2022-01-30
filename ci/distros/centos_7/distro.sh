@@ -11,6 +11,7 @@ dnf install -y wget git curl \
     cmake3 \
     which \
     openssl-devel \
+    openssl-libs \
     ninja-build
 
 yum groupinstall -y "Development tools"
