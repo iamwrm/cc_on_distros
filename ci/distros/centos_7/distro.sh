@@ -25,4 +25,6 @@ scl enable devtoolset-10 'gcc --version'
 scl enable devtoolset-10 'which g++'
 scl enable devtoolset-10 'g++ --version'
 
-echo "source /opt/rh/devtoolset-10/enable \n" > /tmp/setup_cc.sh
+# echo "source /opt/rh/devtoolset-10/enable \n" > /tmp/setup_cc.sh
+
+echo "source /opt/rh/devtoolset-10/enable \n" >> /etc/profile
