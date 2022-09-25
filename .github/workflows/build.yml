@@ -16,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu_2004","ubuntu_2204","centos_7","debian_11"]
-        cc_name: ["gcc12","gcc11","gcc10","dpcpp","clang_trunk"]
+        os: ["ubuntu_2004","ubuntu_2204","centos_7","debian_11","arch"]
+        cc_name: ["gcc12","gcc11","dpcpp","clang_trunk"]
 
 
     steps:
